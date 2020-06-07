@@ -27,18 +27,75 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-let modal = document.getElementById("myModal");
-let i;
-let img = document.getElementsByClassName("gallery");
-let modalImg = document.getElementById("img01");
-for(i=0;i< img.length;i++) {    
-  img[i].onclick = function() {
-    modal.style.display = "block";
-    modalImg.src = this.src;
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getComments(val) {
+    fetch("/data").then(response.json()).then(comments) => {
+    const commentContainer = document.getElementById('comments-list');
+    commentContainer.innerHTML="";
+    for(let i=0; i<val&& i<=comments.length-1;i++){
+        commentContainer.appendChild(createCommentElement(comments[i]));
+    }
+        });
+}
+  
+/**
+ * Handles response by converting it to text and passing the result to
+ * addQuoteToDom().
+ */
+function handleResponse(response) {
+  console.log('Handling the response.');
+
+  // response.text() returns a Promise, because the response is a stream of
+  // content and not a simple variable.
+  const textPromise = response.text();
+
+  // When the response is converted to text, pass the result into the
+  // addQuoteToDom() function.
+  textPromise.then(addCommentToDom);
 }
 
-let closeSpan = document.getElementsByClassName("close")[0];
-closeSPan.onclick = function() { 
-   modal.style.display = "none";
+/** Adds a random quote to the DOM. */
+function addCommentToDom(comment) {
+  console.log('Adding comment to dom: ' + comment);
+
+  const commentContainer = document.getElementById('comments-container');
+  commentContainer.innerText = comment;
+}
+
+/**
+ * The above code is organized to show each individual step, but we can use an
+ * ES6 feature called arrow functions to shorten the code. This function
+ * combines all of the above code into a single Promise chain. You can use
+ * whichever syntax makes the most sense to you.
+ */
+function getRandomCommentsUsingArrowFunctions() {
+  fetch('/data').then(response => response.text()).then((comment) => {
+    document.getElementById('comments-container').innerText = comment;
+  });
+}
+
+fetch('/data').then(response => response.json()).then((data) => {
+    });
+
+/**
+ * Another way to use fetch is by using the async and await keywords. This
+ * allows you to use the return values directly instead of going through
+ * Promises.
+ */
+async function getRandomCommentsUsingAsyncAwait() {
+  const response = await fetch('/data');
+  const comment = await response.text();
+  document.getElementById('comments-container').innerText = comment;
 }
