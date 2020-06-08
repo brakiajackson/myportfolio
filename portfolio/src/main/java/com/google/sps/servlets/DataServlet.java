@@ -35,7 +35,8 @@ public class DataServlet extends HttpServlet {
 
   private List<String> comments;
 
-
+  private List<String> messages = new ArrayList<String>();
+  
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -60,7 +61,20 @@ public class DataServlet extends HttpServlet {
 
     }
       
-    
+    response.getOutputStream().println("<h1>Chat Web App</h1>");
+	response.getOutputStream().println("<hr/>");
+		
+	for(int i = 0; i < messages.size(); i++){
+		response.getOutputStream().println("<p>" + messages.get(i) + "</p>");
+	}
+	response.getOutputStream().println("<hr/>");
+		
+	response.getOutputStream().println("<form action=\"/chat\" method=\"POST\">");
+	response.getOutputStream().println("<input type=\"text\" name=\"name\" value=\"Ada\">");
+	response.getOutputStream().println("<input type=\"text\" name=\"message\" value=\"Happy coding!\">");
+	response.getOutputStream().println("<input type=\"submit\" value=\"Send\">");
+	response.getOutputStream().println("</form>");
+	
   }      
 
    @Override
@@ -69,6 +83,8 @@ public class DataServlet extends HttpServlet {
       String Com = request.getParameter("comments-input");
       String name = request.getParameter("name-input");
       long timestamp = System.currentTimeMillis();
+      String chatMessage = name + ": " + Com;
+	  messages.add(chatMessage);
 
 
       String[] words = name.split("\\s*,\\s*");
