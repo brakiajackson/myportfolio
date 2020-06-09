@@ -30,50 +30,35 @@ function addRandomGreeting() {
 
 
 
-
-
-
-
-
-
-// getting comments function
-
-
-function getComments(val) {
-
-    fetch("/data").then(response => response.json()).then(comment) => {
-    const commentContainer = document.getElementById('comments-list');
-    commentContainer.innerHTML="";
-    for(let i=0; i<val&& i<=comment.length-1;i++){
-        commentContainer.appendChild(createCommentsElement(comment[i]));
-    }
-        });
-
+function getData() {
+  fetch('/data').then(response => response.text()).then((data) => {
+    document.getElementById('data-container').innerText = data;
+  });
 }
 
+function loadUser(){
+    fetch('/status').then(response => response.text()).then((txt) => {
+    var form = document.getElementById("login");
+    if (txt.includes("You")) {
+      form.style.hidden;
+      document.getElementById("error").innerHTML = "<i>" + txt + "</i>";
+    } else{
+      document.getElementById("error").innerHTML = "<i>" + txt + "</i>";
+    }});
+}
 
+function login() {
+  fetch('/status').then(response => response.text()).then((txt) => {
+     const loginElement = document.getElementById('login');
+     console.log(txt)
+     loginElement.innerHTML = txt;
+  });
+}
 
-// creates <li> elements containing text */
-function createCommentsElement(comments) {
-    const divElement = document.createElement("div");
-    
-    const nameElement = document.createElement("h2");
-    nameElement.innerText = "Name: " + comments[0];
-    divElement.appendChild(nameElement);
-
-    const commentsElement = document.createElement("p");
-    commentsElement.innerText = "Comment: " + comments[2];
-    divElement.appendChild(commentsElement);
-
-    const deleteElement = document.createElement("delete");
-    deleteElement.innerText = "Delete";
-    deleteElement.addEventListener("click", () => {
-    deleteElement(comments);
-
-    divElement.remove();
-
-    });
-    divElement.appendChild(deleteElement);
-    return divElement;
+function loadPage(){
+    login();
+    getStatus();
+    getData();
+    loadUser();
 
 }

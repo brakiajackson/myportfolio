@@ -15,6 +15,8 @@
 package com.google.sps.servlets;
 
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import java.util.List;
 import java.util.Arrays;
+import java.util.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,27 +39,85 @@ import javax.servlet.http.HttpServletResponse;
 public class DataServlet extends HttpServlet {
 
 
+    public class Task {
+    public String commentInput;
+    public long timestamp;
+    public String name;
+
+    public Task(String name, String commentInput, long timestamp) {
+        this.commentInput = commentInput;
+        this.timestamp = timestamp;
+        this.name = name;
+        }
+    }
+
+
+    @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String commentInput = getParameter(request, "commentInput", "");
+    String name = getParameter(request, "name", "");
+    long timestamp = System.currentTimeMillis();
+
+    Entity commentEntity = new Entity("Comments");
+    commentEntity.setProperty("timestamp", timestamp);
+    commentEntity.setProperty("commentInput", commentInput);
+    commentEntity.setProperty("name", name);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
+
+
+    Query query = new Query("Comments").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    List<Task> comments = new ArrayList<>();
+    for (Entity Comment : results.asIterable()) {
+        commentEntity.getProperty("timestamp");
+        commentEntity.getProperty("commentInput");
+        commentEntity.getProperty("name");
+    
+    Task comment = new Task(name, commentInput, timestamp);
+    comments.add(comment);
+    }
+
+    Gson gson = new Gson();
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(comments));
+   }
+
+    
+
+    // Send the JSON as the response   
+
     @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       // Gets Input
-      String Com = getParameter(request, "comment-input", "");
-      String name1= getParameter(request, "name-input", "");
-      long timestamp = System.currentTimeMillis();
-      
+      UserService userService = UserServiceFactory.getUserService();
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    // Must be logged in to post comments
+    String commentInput = request.getParameter("commentInput");
+    String name = request.getParameter("name");
+    long timestamp = System.currentTimeMillis();
+    String email = userService.getCurrentUser().getEmail();
+    String displayemail;
+    
+    if (request.getParameter("displayemail") == null) {
+      displayemail = "off";
+    } else {
+      displayemail = "on";
+    }
 
 
-      String[] words = name1.split("\\s*,\\s*");
+    
 
-      Entity commentEntity = new Entity("Comment");
-      commentEntity.setProperty("body", Com);
-      commentEntity.setProperty("name", words[0]);
+      Entity commentEntity = new Entity("Comments");
+      commentEntity.setProperty("commentInput", commentInput);
+      commentEntity.setProperty("name", name);
       commentEntity.setProperty("timestamp", timestamp);
 
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(commentEntity);
 
-      response.setContentType("text/html;");
-   
 
       response.sendRedirect("response.html");
 
@@ -72,49 +133,7 @@ public class DataServlet extends HttpServlet {
         return value;
     }
   
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-    Query query = new Query("Comments").addSort("timestamp", SortDirection.DESCENDING);
-
-    PreparedQuery results = datastore.prepare(query);
-
-    ArrayList<ArrayList> comment = new ArrayList<>();
-
-    for (Entity entity : results.asIterable()) {
-        String name = (String) entity.getProperty("name");
-        String body = (String) entity.getProperty("body");
-        long id = entity.getKey().getId();
-        long timestamp = (long) entity.getProperty("timestamp");
-        
-
-        ArrayList<Object> info= new ArrayList<>();
-
-        info.add(name);
-        info.add(body);
-        info.add(id);
-
-        comment.add(info);
-    }
-
-
-    String json=convertToJsonUsingGson(comment);
-
-    // Send the JSON as the response   
-
-    
-    response.setContentType("application/json;");
-    response.getWriter().println(json);   
-   
-    }
-
-    private String convertToJsonUsingGson(ArrayList messages) {
-        Gson gson = new Gson();
-        String json = gson.toJson(messages);
-        return json;
   
-    }
     
 
 
