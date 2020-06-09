@@ -23,7 +23,9 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import java.io.IOException;
 import java.util.ArrayList;
+import com.google.gson.Gson;
 import java.util.List;
+import java.util.Arrays;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,61 +35,17 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  private List<String> comments;
 
-  private List<String> messages = new ArrayList<String>();
-  
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-
-    PreparedQuery results = datastore.prepare(query);
-
-    ArrayList<ArrayList> comments = new ArrayList<>();
-
-    for (Entity entity : results.asIterable()) {
-        String name = (String) entity.getProperty("name");
-        String body = (String) entity.getProperty("body");
-
-        
-
-        ArrayList<Object> info = new ArrayList<>();
-
-        info.add(name);
-        info.add(body);
-
-    }
-      
-    response.getOutputStream().println("<h1>Chat Web App</h1>");
-	response.getOutputStream().println("<hr/>");
-		
-	for(int i = 0; i < messages.size(); i++){
-		response.getOutputStream().println("<p>" + messages.get(i) + "</p>");
-	}
-	response.getOutputStream().println("<hr/>");
-		
-	response.getOutputStream().println("<form action=\"/chat\" method=\"POST\">");
-	response.getOutputStream().println("<input type=\"text\" name=\"name\" value=\"Ada\">");
-	response.getOutputStream().println("<input type=\"text\" name=\"message\" value=\"Happy coding!\">");
-	response.getOutputStream().println("<input type=\"submit\" value=\"Send\">");
-	response.getOutputStream().println("</form>");
-	
-  }      
-
-   @Override
+    @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       // Gets Input
-      String Com = request.getParameter("comments-input");
-      String name = request.getParameter("name-input");
+      String Com = getParameter(request, "comment-input", "");
+      String name1= getParameter(request, "name-input", "");
       long timestamp = System.currentTimeMillis();
-      String chatMessage = name + ": " + Com;
-	  messages.add(chatMessage);
+      
 
 
-      String[] words = name.split("\\s*,\\s*");
+      String[] words = name1.split("\\s*,\\s*");
 
       Entity commentEntity = new Entity("Comment");
       commentEntity.setProperty("body", Com);
@@ -98,11 +56,66 @@ public class DataServlet extends HttpServlet {
       datastore.put(commentEntity);
 
       response.setContentType("text/html;");
-
+   
 
       response.sendRedirect("response.html");
 
+      // Get the input from the form.
+  
     }
+
+    private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+        String value = request.getParameter(name);
+        if (value == null) {
+            return defaultValue;
+        }
+        return value;
+    }
+  
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    Query query = new Query("Comments").addSort("timestamp", SortDirection.DESCENDING);
+
+    PreparedQuery results = datastore.prepare(query);
+
+    ArrayList<ArrayList> comment = new ArrayList<>();
+
+    for (Entity entity : results.asIterable()) {
+        String name = (String) entity.getProperty("name");
+        String body = (String) entity.getProperty("body");
+        long id = entity.getKey().getId();
+        long timestamp = (long) entity.getProperty("timestamp");
+        
+
+        ArrayList<Object> info= new ArrayList<>();
+
+        info.add(name);
+        info.add(body);
+        info.add(id);
+
+        comment.add(info);
+    }
+
+
+    String json=convertToJsonUsingGson(comment);
+
+    // Send the JSON as the response   
+
+    
+    response.setContentType("application/json;");
+    response.getWriter().println(json);   
+   
+    }
+
+    private String convertToJsonUsingGson(ArrayList messages) {
+        Gson gson = new Gson();
+        String json = gson.toJson(messages);
+        return json;
+  
+    }
+    
 
 
 }
