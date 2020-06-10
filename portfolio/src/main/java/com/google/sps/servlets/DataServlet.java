@@ -92,8 +92,8 @@ public class DataServlet extends HttpServlet {
     @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       // Gets Input
-      UserService userService = UserServiceFactory.getUserService();
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    UserService userService = UserServiceFactory.getUserService();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     // Must be logged in to post comments
     String commentInput = request.getParameter("commentInput");
@@ -111,15 +111,15 @@ public class DataServlet extends HttpServlet {
 
     
 
-      Entity commentEntity = new Entity("Comments");
-      commentEntity.setProperty("commentInput", commentInput);
-      commentEntity.setProperty("name", name);
-      commentEntity.setProperty("timestamp", timestamp);
+    Entity commentEntity = new Entity("Comments");
+    commentEntity.setProperty("commentInput", commentInput);
+    commentEntity.setProperty("name", name);
+    commentEntity.setProperty("timestamp", timestamp);
 
-      datastore.put(commentEntity);
+    datastore.put(commentEntity);
 
 
-      response.sendRedirect("response.html");
+    response.sendRedirect("response.html");
 
       // Get the input from the form.
   

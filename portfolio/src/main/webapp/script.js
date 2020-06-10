@@ -30,12 +30,6 @@ function addRandomGreeting() {
 
 
 
-function getData() {
-  fetch('/data').then(response => response.text()).then((data) => {
-    document.getElementById('data-container').innerText = data;
-  });
-}
-
 function loadUser(){
     fetch('/status').then(response => response.text()).then((txt) => {
     var form = document.getElementById("login");
