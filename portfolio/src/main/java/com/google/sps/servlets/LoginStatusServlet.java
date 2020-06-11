@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/logins")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/loginStatus")
+public class LoginStatusServlet extends HttpServlet {
 
  @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -38,4 +38,4 @@ public class LoginServlet extends HttpServlet {
       response.getWriter().println("<p>You must <a href=\"" + loginUrl + "\">Login</a> to add a comment.</p>");
     }
   }
-} 
+}

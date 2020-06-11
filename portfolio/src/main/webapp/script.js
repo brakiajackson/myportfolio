@@ -27,110 +27,29 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-async function getData() {
-  console.log('Getting Data');
-  const response = await fetch('/data');
-  const data = await response.text();
-  console.log(data)
-  document.getElementById('data-container').innerText = data;
+function getData() {
+  fetch('/data').then(response => response.text()).then((txt) => {
+    const dataElement = document.getElementById('commentInput');
+    dataElement.innerHTML = txt;
+    document.getElementById('data-container').innerHTML = txt;
+  });
 }
 
-function loadEntries() {
-  const commentCount = document.getElementById('maxcomments');
-  console.log(commentCount.value)
-  fetch('/data').then(response => response.json()).then((entries) => {
-    const entryListElement = document.getElementById('entry-list');
-    entries.forEach((entry) => {
-      console.log(entry.title)
-      entryListElement.appendChild(createEntryElement(entry));
-    })
-  });
-  fetch('/logins').then(response => response.text()).then((txt) => {
-     var form = document.getElementById("addcomm");
-    if (txt.includes("Please")) {
+function loadUser(){
+    fetch('/loginStatus').then(response => response.text()).then((txt) => {
+    const loginElement = document.getElementById('login');
+    console.log(txt)
+    loginElement.innerHTML = txt;
+    var form = document.getElementById("commentSection");
+    if (txt.includes("You")) {
       form.style.display = "none";
-      document.getElementById("error").innerHTML = "<i>" + txt + "</i>";
+      document.getElementById("login").innerHTML = "<i>" + txt + "</i>";
     } else{
-      document.getElementById("error").innerHTML = "<i>" + txt + "</i>";
+      document.getElementById("login").innerHTML = "<i>" + txt + "</i>";
     }});
 }
 
-function login() {
-  fetch('/logins').then((response) => {
-     const loginElement = document.getElementById('loginel');
-     console.log(response)
-     loginElement.innerHTML = response;
-  });
-}
-
-function getMessages() {
-  const commentCount = document.getElementById('maxcomments');
-  console.log(commentCount.name)
-  document.getElementById('entry-list').innerHTML = "";
-  fetch('/data?maxcomments=' + commentCount.value).then(response => response.json()).then((entries) => {
-    const entryListElement = document.getElementById('entry-list');
-    entries.forEach((entry) => {
-      console.log(entry.title)
-      entryListElement.appendChild(createEntryElement(entry));
-    })
-  });
-}
-
-function sortComments() {
-  const sort = document.getElementById('sort');
-  console.log(sort.value)
-  document.getElementById('entry-list').innerHTML = "";
-  fetch('/data?sort=' + sort.value).then(response => response.json()).then((entries) => {
-    const entryListElement = document.getElementById('entry-list');
-    entries.forEach((entry) => {
-      console.log(entry.title)
-      entryListElement.appendChild(createEntryElement(entry));
-    })
-  });
-}
-
-function updateCount() {
-  location.replace("contact.html")
-}
-
-function createEntryElement(entry) {
-  const entryElement = document.createElement('li');
-  entryElement.className = 'entry collection-item';
-
-  const titleElement = document.createElement('span');
-  titleElement.innerText = entry.title;
-
-  const nameElement = document.createElement('span');
-  if (entry.name === undefined || entry.name === "") {
-    nameElement.innerHTML = "-- Anonymous".italics().bold();
-  } else {
-    nameElement.innerHTML = ("--" + entry.name).italics().bold();
-  }
-  nameElement.style.marginLeft = "15px"
-
-  const emailElement = document.createElement('span');
-  if (entry.displayemail === "on") {
-    emailElement.innerHTML = "(" + entry.email + ")";
-  } else {
-    emailElement.innerHTML = "(Hidden email)"
-  }
-  emailElement.style.margin = "2px";
-
-  const timeElement = document.createElement('span');
-  var date = new Date(entry.timestamp);
-  timeElement.innerText = date.toString().slice(0,24);
-  timeElement.style.float = "right";
-  timeElement.style.marginRight = "10px";
-
-  });
-
-
-  entryElement.appendChild(titleElement);
-  entryElement.appendChild(nameElement);
-  entryElement.appendChild(emailElement);
-  entryElement.appendChild(timeElement);
-  return entryElement;
-}
-function loadPage() {
-  loadEntries();
+function loadPage(){
+    getData();
+    loadUser();   
 }
