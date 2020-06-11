@@ -146,8 +146,8 @@ body {
 
     <form method="post" id="commentSection">
     <p>Leave a comment:</p>
-        <p><input class="w3-input w3-padding-16" type="text" name="commentInput" placeholder="comment"></p>
-        <p><input class="w3-input w3-padding-10" type="text" name="name" placeholder="name(optional)"></p>
+        <p><input class="w3-input w3-padding-16" type="text" name="name" placeholder="name(optional)"></p>
+        <p><input class="w3-input w3-padding-10" type="text" name="commentInput" placeholder="comment"></p>
 
         <p>
           <label>
@@ -162,13 +162,11 @@ body {
     <br></br>
     <div class="w3-content w3-justify w3-text-grey w3-padding-10" id="data-container"></div>
 
-  </div>
 
 
 
-
-
-          <!-- <form action="/data" method="POST">  
+        <h2>Comments: </h2>
+          <!-- <form action="/data" method="POST">  -->
           <form>
           <label>Max # of comments:</label>
             <select onchange="getMessages()" id="maxcomments" name="maxcomments" required style="width:15%">
@@ -178,7 +176,6 @@ body {
               <option value="20">20</option>
             </select>
           </form>
-        </div>
         <div class="input-field col s3 select-wrapper" style="width:25%">
           <form>
           <label>Sort:</label>
@@ -194,9 +191,8 @@ body {
 
       <ul class="collection" id="entry-list"></ul>
       <br>
--->
 
-
+</div>
 
   </div>
 </html>
