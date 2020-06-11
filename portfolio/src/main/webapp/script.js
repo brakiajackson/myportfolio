@@ -27,9 +27,6 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-
-
-
 async function getData() {
   console.log('Getting Data');
   const response = await fetch('/data');
@@ -125,6 +122,7 @@ function createEntryElement(entry) {
   timeElement.style.float = "right";
   timeElement.style.marginRight = "10px";
 
+  });
 
 
   entryElement.appendChild(titleElement);
@@ -133,9 +131,6 @@ function createEntryElement(entry) {
   entryElement.appendChild(timeElement);
   return entryElement;
 }
-
 function loadPage() {
   loadEntries();
-  loadUser();
-  getData();
 }

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+/** Servlet that returns some example content. TODO: modify this file to handle comments data */
 package com.google.sps.servlets;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;

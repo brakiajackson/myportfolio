@@ -1,8 +1,16 @@
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/logins")
 public class LoginServlet extends HttpServlet {
 
-  @Override
+ @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html");
 
@@ -21,13 +29,13 @@ public class LoginServlet extends HttpServlet {
       String urlToRedirectToAfterUserLogsOut = "/";
       String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
-      response.getWriter().println("<p>Welcome " + userEmail + "!</p>");
-      response.getWriter().println("<p>Submit a comment or <a href=\"" + logoutUrl + "\"><button style=\"padding:0px 3px 0px 3px\" class=\"button button_blue hoverable valign-container z-depth-1\"><p class=\"valign\"> <i>Logout</i> </p></button></a></p>");
+      response.getWriter().println("<p>Hello " + userEmail + "!</p>");
+      response.getWriter().println("<p>Add a comment below or <a href=\"" + logoutUrl + "\">logout</a>.</p>");
     } else {
       String urlToRedirectToAfterUserLogsIn = "/";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 
-      response.getWriter().println("<p>Please <a href=\"" + loginUrl + "\"><button style=\"padding:0px 3px 0px 3px\" class=\"button button_blue hoverable valign-container z-depth-1\"><p class=\"valign\"> <i>Login</i> </p></button></a> to add a comment below.</p>");
+      response.getWriter().println("<p>You must <a href=\"" + loginUrl + "\">Login</a> to add a comment.</p>");
     }
   }
-}
+} 
