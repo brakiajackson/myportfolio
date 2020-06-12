@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.users.UserService;
@@ -107,6 +109,8 @@ public class DataServlet extends HttpServlet {
       maxcount = Integer.parseInt(request.getParameter("maxcomments"));
     }
 
+    
+
     List<Entry> comments = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
       long id = entity.getKey().getId();
@@ -154,7 +158,7 @@ public class DataServlet extends HttpServlet {
       displayemail = "on";
     }
 
-    Entity entryEntity = new Entity("Comments");
+    Entity entryEntity = new Entity("Entry");
     entryEntity.setProperty("title", title);
     entryEntity.setProperty("name", name);
     entryEntity.setProperty("timestamp", timestamp);
