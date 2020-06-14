@@ -147,6 +147,8 @@ function deleteEntry(entry) {
   fetch('/delete', {method: 'POST', body: params});
 }
 
+
+
 /** Creates a Google map and adds it to the page. */
 var marker;
 var marker2;

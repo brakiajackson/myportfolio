@@ -44,7 +44,6 @@ public class DataServlet extends HttpServlet {
     public String title;
     public long timestamp;
     public String name;
-    public int likes;
     public String email;
     public String displayemail;
 
@@ -53,7 +52,6 @@ public class DataServlet extends HttpServlet {
       this.title = title;
       this.timestamp = timestamp;
       this.name = name;
-      this.likes = 0;
       this.email = email;
       this.displayemail = displayemail;
     }
