@@ -50,6 +50,17 @@ body {
   padding: 14px 20px;
   text-decoration: none;
 }
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
 
 /* Right-aligned link */
 .navbar a.right {
@@ -150,26 +161,32 @@ img {vertical-align: middle;}
 <div class="slideshow-container">
   <div class="mySlides2">
     <img src="pictures/deb3.jpg" style="width:100%">
+    <div class="text">Debutante</div>
   </div>
 
   <div class="mySlides2">
     <img src="pictures2/french.jpg" style="width:100%;height:80%">
+    <div class="text">French Language Immersion Camp</div>
   </div>
 
   <div class="mySlides2">
     <img src="pictures2/bulldog.jpg" style="width:100%;height:80%">
+    <div class="text">Alabama A&M University Dawg Pound</div>
   </div>
 
   <div class="mySlides2">
     <img src="pictures2/rsz_am.jpg" style="width:100%;height:70%">
+    <div class="text">Senior Pictures</div>
   </div>
 
   <div class="mySlides2">
     <img src="pictures/cssi.jpg" style="width:100%;height:80%">
+    <div class="text">Computer Science Summer Institute ~ HBCU</div>
   </div>
 
   <div class="mySlides2">
     <img src="pictures/paris.jpg" style="width:95%;height:80%">
+    <div class="text">Trip to Paris</div>
   </div>
 
   <a class="prev" onclick="plusSlides(-1, 1)">&#10094;</a>
@@ -198,9 +215,6 @@ function showSlides(n, no) {
   x[slideIndex[no]-1].style.display = "block";  
 }
 </script>
-
-
-
 
 
 </body>
