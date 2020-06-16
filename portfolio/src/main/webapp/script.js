@@ -20,6 +20,7 @@
 
 
 function createMap() {
+  // fetch('/marker-data').then(response => response.json()).then((AddedMarkers) => {
   const map = new google.maps.Map(
       document.getElementById('map'),
       {center: {lat: 34.738228, lng: -86.601791}, zoom: 8});
@@ -41,6 +42,11 @@ function createMap() {
     map: map,
     title: 'Keel Mountain Preserve'
   });
+
+  //AddedMarkers.forEach((AddedMarker) => {
+      //new google.maps.Marker(
+          //{position: {lat: AddedMarker.lat, lng: AddedMarker.lng}, map: map});
+    //});
 }
 
 
