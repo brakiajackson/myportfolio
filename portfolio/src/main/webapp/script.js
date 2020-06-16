@@ -16,10 +16,31 @@
  * Adds a random greeting to the page.
  */
 
+
+
+
 function createMap() {
   const map = new google.maps.Map(
       document.getElementById('map'),
-      {center: {lat: 37.422, lng: -122.084}, zoom: 16});
+      {center: {lat: 34.738228, lng: -86.601791}, zoom: 8});
+
+    const MonteMarker = new google.maps.Marker({
+    position: {lat: 34.7399, lng: -86.5118},
+    map: map,
+    title: 'Monte Sano Mountains'
+  });
+
+  const MonteMarker1 = new google.maps.Marker({
+    position: {lat: 34.7348, lng: -86.7294},
+    map: map,
+    title: 'Rainbow Mountain Trail'
+  });
+
+  const MonteMarker2 = new google.maps.Marker({
+    position: {lat: 34.655110, lng: -86.412983},
+    map: map,
+    title: 'Keel Mountain Preserve'
+  });
 }
 
 
